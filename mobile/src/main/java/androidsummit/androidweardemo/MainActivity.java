@@ -115,7 +115,28 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
+        final String path = messageEvent.getPath();
 
+        final Fragment fragment = apiFragment.getPagerAdapter().getRegisteredFragment(apiFragment.getViewPager
+            ().getCurrentItem());
+        if (fragment instanceof MessageApiFragment) {
+
+            if (path.equalsIgnoreCase("/poke_phone")) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((MessageApiFragment) fragment).setMessageText("OWWW!!!!!");
+                    }
+                });
+            } else if (path.equalsIgnoreCase("/clear_phone")) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((MessageApiFragment) fragment).setMessageText("Hello World!");
+                    }
+                });
+            }
+        }
     }
 
     @Override

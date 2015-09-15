@@ -102,4 +102,8 @@ public class WearApiViewPagerAdapter extends FragmentStatePagerAdapter {
 
         return pageTitle;
     }
+
+    public Fragment getRegisteredFragment(int position) {
+        return mFragments.get(position);
+    }
 }

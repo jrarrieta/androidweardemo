@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidsummit.androidweardemo.utils.GoogleApiUtils;
 import androidsummit.androidweardemo.utils.ThreadUtils;
 
 public class WearApiFragment extends android.support.v4.app.Fragment {
@@ -18,6 +19,8 @@ public class WearApiFragment extends android.support.v4.app.Fragment {
     private static final int NUMBER_OF_TABS = 3;
 
     private WearApiViewPagerAdapter pagerAdapter;
+
+    private ViewPager viewPager;
 
     public static WearApiFragment newInstance() {
         return new WearApiFragment();
@@ -52,7 +55,7 @@ public class WearApiFragment extends android.support.v4.app.Fragment {
         final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         setupTabLayout(tabLayout);
 
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.pager);
+        viewPager = (ViewPager) view.findViewById(R.id.pager);
         setupViewPager(toolbar, tabLayout, viewPager);
         setupTabLayoutListener(toolbar, tabLayout, viewPager);
 
@@ -88,6 +91,20 @@ public class WearApiFragment extends android.support.v4.app.Fragment {
                 toolbar.setTitle(pagerAdapter.getPageTitle(tab.getPosition()));
                 tabLayout.getTabAt(tab.getPosition()).setIcon(
                     getResources().getDrawable(pagerAdapter.getIconHighLightAtPosition(tab.getPosition())));
+                switch (tab.getPosition()) {
+                    case 0:
+                        GoogleApiUtils.sendMessageToAllNodes(((MainActivity) getActivity()).getGoogleApiClient(),
+                            "/show_message_api");
+                        break;
+                    case 1:
+                        GoogleApiUtils.sendMessageToAllNodes(((MainActivity) getActivity()).getGoogleApiClient(),
+                            "/show_data_api");
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        break;
+                }
             }
 
             @Override
@@ -101,5 +118,13 @@ public class WearApiFragment extends android.support.v4.app.Fragment {
 
             }
         });
+    }
+
+    public ViewPager getViewPager() {
+        return viewPager;
+    }
+
+    public WearApiViewPagerAdapter getPagerAdapter() {
+        return pagerAdapter;
     }
 }
