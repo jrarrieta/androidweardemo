@@ -134,9 +134,9 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                     DataItem dataItem = event.getDataItem();
                     final String path = dataItem.getUri().getPath();
 
-                    if (path.equalsIgnoreCase("/data_image")) {
+                    if (path.equalsIgnoreCase("")) {
                         DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                        final Asset userImageAsset = dataMapItem.getDataMap().getAsset("data_image");
+                        final Asset userImageAsset = dataMapItem.getDataMap().getAsset("");
 
                         final Bitmap bitmap = GoogleApiUtils.createBitmapFromAsset(mGoogleApiClient, userImageAsset);
 

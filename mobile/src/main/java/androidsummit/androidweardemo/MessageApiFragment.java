@@ -45,7 +45,7 @@ public class MessageApiFragment extends WearApiTabFragment {
             @Override
             public void onClick(View v) {
                 GoogleApiUtils.sendMessageToAllNodes(((MainActivity) getActivity()).getGoogleApiClient(),
-                    "/poke_watch");
+                    "");
             }
         });
 
@@ -54,8 +54,7 @@ public class MessageApiFragment extends WearApiTabFragment {
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GoogleApiUtils.sendMessageToAllNodes(((MainActivity) getActivity()).getGoogleApiClient(),
-                    "/clear_watch");
+                // send message to clear the watch
             }
         });
     }

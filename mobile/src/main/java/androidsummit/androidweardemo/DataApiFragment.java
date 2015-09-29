@@ -49,7 +49,7 @@ public class DataApiFragment extends WearApiTabFragment {
                 Asset asset;
                 asset =
                     GoogleApiUtils.createAssetFromBitmap(BitmapFactory.decodeResource(getResources(), imageAdapter.getImageId(position)));
-                GoogleApiUtils.postToDataMap(((MainActivity) getActivity()).getGoogleApiClient(), "/data_image", "data_image", asset);
+                GoogleApiUtils.postToDataMap(((MainActivity) getActivity()).getGoogleApiClient(), "", "", asset);
             }
         });
     }
