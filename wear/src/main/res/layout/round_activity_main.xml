@@ -6,11 +6,45 @@
                 tools:context=".MainActivity"
                 tools:deviceIds="wear_round">
 
-    <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="@string/hello_round"/>
+    <LinearLayout
+            android:id="@+id/message_api"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+        <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hello_square"
+                android:paddingBottom="5dp"/>
+
+        <Button
+                android:id="@+id/poke_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poke Phone!"
+                android:paddingBottom="5dp"/>
+
+        <Button
+                android:id="@+id/clear_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear Phone!"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/data_api"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+        <ImageView
+                android:id="@+id/data_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </LinearLayout>
 </RelativeLayout>

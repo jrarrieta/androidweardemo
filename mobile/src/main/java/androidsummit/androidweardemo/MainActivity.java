@@ -1,37 +1,146 @@
 package androidsummit.androidweardemo;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.Channel;
+import com.google.android.gms.wearable.ChannelApi;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Wearable;
 
-public class MainActivity extends AppCompatActivity {
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener, MessageApi.MessageListener,
+    DataApi.DataListener, ChannelApi.ChannelListener {
+
+    private WearApiFragment apiFragment;
+
+    protected GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
+//        setWearableService();
+        setContentView(R.layout.content_layout);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (savedInstanceState == null) {
+            apiFragment = WearApiFragment.newInstance();
+            addContentFragment(apiFragment, WearApiFragment.TAG);
         }
 
-        return super.onOptionsItemSelected(item);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
+            .addApi(Wearable.API)
+            .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        Wearable.DataApi.removeListener(mGoogleApiClient, this);
+        Wearable.MessageApi.removeListener(mGoogleApiClient, this);
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Wearable.DataApi.addListener(mGoogleApiClient, this);
+        Wearable.MessageApi.addListener(mGoogleApiClient, this);
+    }
+
+    public GoogleApiClient getGoogleApiClient() {
+        return mGoogleApiClient;
+    }
+
+
+    private void setWearableService() {
+        Intent intent = new Intent(this, DataLayerListenerService.class);
+        startService(intent);
+    }
+
+    protected void addContentFragment(Fragment content, String tag) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.content, content, tag);
+        if (ft.isAddToBackStackAllowed() && fm.getFragments() != null) {
+            ft.addToBackStack(tag);
+        }
+        ft.commit();
+    }
+
+    @Override
+    public void onChannelOpened(Channel channel) {
+
+    }
+
+    @Override
+    public void onChannelClosed(Channel channel, int i, int i1) {
+
+    }
+
+    @Override
+    public void onInputClosed(Channel channel, int i, int i1) {
+
+    }
+
+    @Override
+    public void onOutputClosed(Channel channel, int i, int i1) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEventBuffer) {
+
+    }
+
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+        final String path = messageEvent.getPath();
+
+        final Fragment fragment = apiFragment.getPagerAdapter().getRegisteredFragment(apiFragment.getViewPager
+            ().getCurrentItem());
+        if (fragment instanceof MessageApiFragment) {
+
+            if (path.equalsIgnoreCase("/poke_phone")) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((MessageApiFragment) fragment).setMessageText("OWWW!!!!!");
+                    }
+                });
+            } else if (path.equalsIgnoreCase("/clear_phone")) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((MessageApiFragment) fragment).setMessageText("Hello World!");
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }
