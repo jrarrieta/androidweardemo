@@ -168,26 +168,26 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                     messageLayout.setVisibility(View.VISIBLE);
                 }
             });
-        } else if (path.equalsIgnoreCase("/poke_watch")) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mTextView.setText("OWWW!!");
-                }
-            });
-        } else if (path.equalsIgnoreCase("/clear_watch")) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mTextView.setText(helloText);
-                }
-            });
         } else if (path.equalsIgnoreCase("/show_data_api")) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     messageLayout.setVisibility(View.GONE);
                     dataLayout.setVisibility(View.VISIBLE);
+                }
+            });
+        } else if (path.equalsIgnoreCase("")) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mTextView.setText("OWWW!!");
+                }
+            });
+        } else if (path.equalsIgnoreCase("")) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mTextView.setText(helloText);
                 }
             });
         }

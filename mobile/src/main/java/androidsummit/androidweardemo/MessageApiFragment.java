@@ -1,5 +1,7 @@
 package androidsummit.androidweardemo;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +46,7 @@ public class MessageApiFragment extends WearApiTabFragment {
         pokeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GoogleApiUtils.sendMessageToAllNodes(((MainActivity) getActivity()).getGoogleApiClient(),
-                    "");
+                GoogleApiUtils.sendMessageToAllNodes(getGoogleApiClient(), "");
             }
         });
 
@@ -61,5 +62,9 @@ public class MessageApiFragment extends WearApiTabFragment {
 
     public void setMessageText(String text) {
         textView.setText(text);
+    }
+
+    private GoogleApiClient getGoogleApiClient() {
+        return ((MainActivity) getActivity()).getGoogleApiClient();
     }
 }
