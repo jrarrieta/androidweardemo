@@ -1,5 +1,6 @@
 package androidsummit.androidweardemo;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Asset;
 
 import android.content.Context;
@@ -49,7 +50,7 @@ public class DataApiFragment extends WearApiTabFragment {
                 Asset asset;
                 asset =
                     GoogleApiUtils.createAssetFromBitmap(BitmapFactory.decodeResource(getResources(), imageAdapter.getImageId(position)));
-                GoogleApiUtils.postToDataMap(((MainActivity) getActivity()).getGoogleApiClient(), "/data_image", "data_image", asset);
+                GoogleApiUtils.postToDataMap(getGoogleApiClient(), "/data_image", "data_image", asset);
             }
         });
     }
@@ -101,5 +102,9 @@ public class DataApiFragment extends WearApiTabFragment {
         public int getImageId(int position) {
             return mThumbIds[position];
         }
+    }
+
+    private GoogleApiClient getGoogleApiClient() {
+        return ((MainActivity) getActivity()).getGoogleApiClient();
     }
 }
