@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.ref.WeakReference;
+
 import androidsummit.androidweardemo.utils.GoogleApiUtils;
 import androidsummit.androidweardemo.utils.ThreadUtils;
 
@@ -81,6 +83,9 @@ public class WearApiFragment extends android.support.v4.app.Fragment {
 
         pagerAdapter = new WearApiViewPagerAdapter(getActivity().getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
+
+        viewPager.addOnPageChangeListener(new WearApiFragmentPageChangeListener(tabLayout, toolbar,
+            (WearApiViewPagerAdapter) viewPager.getAdapter()));
     }
 
     private void setupTabLayoutListener(final Toolbar toolbar, final TabLayout tabLayout, final ViewPager viewPager) {
@@ -118,6 +123,48 @@ public class WearApiFragment extends android.support.v4.app.Fragment {
 
             }
         });
+    }
+
+    public class WearApiFragmentPageChangeListener implements ViewPager.OnPageChangeListener {
+
+        private final WeakReference<Toolbar> mToolbarRef;
+
+        private final WeakReference<TabLayout> mTabLayoutRef;
+
+        private final WeakReference<WearApiViewPagerAdapter> mPagerAdapterRef;
+
+        private int mScrollState;
+
+        public WearApiFragmentPageChangeListener(TabLayout tabLayout, Toolbar toolbar, WearApiViewPagerAdapter pagerAdapter) {
+            this.mTabLayoutRef = new WeakReference(tabLayout);
+            this.mToolbarRef = new WeakReference(toolbar);
+            this.mPagerAdapterRef = new WeakReference(pagerAdapter);
+        }
+
+        public void onPageScrollStateChanged(int state) {
+            this.mScrollState = state;
+        }
+
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            TabLayout tabLayout = mTabLayoutRef.get();
+            if (tabLayout != null) {
+                tabLayout.setScrollPosition(position, positionOffset, this.mScrollState == 1);
+            }
+        }
+
+        public void onPageSelected(int position) {
+            TabLayout tabLayout = mTabLayoutRef.get();
+            WearApiViewPagerAdapter pagerAdapter = mPagerAdapterRef.get();
+            if (tabLayout != null && pagerAdapter != null) {
+                tabLayout.getTabAt(position).select();
+                tabLayout.getTabAt(position).setIcon(getResources().getDrawable(pagerAdapter.getIconHighLightAtPosition(position)));
+            }
+
+            Toolbar toolbar = mToolbarRef.get();
+            if (toolbar != null && pagerAdapter != null) {
+                toolbar.setTitle(pagerAdapter.getPageTitle(position));
+            }
+        }
     }
 
     public ViewPager getViewPager() {
