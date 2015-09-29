@@ -55,7 +55,7 @@ public class MessageApiFragment extends WearApiTabFragment {
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // send message to clear the watch
+                GoogleApiUtils.sendMessageToAllNodes(getGoogleApiClient(), "");
             }
         });
     }
